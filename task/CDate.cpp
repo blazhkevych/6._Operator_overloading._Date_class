@@ -31,10 +31,10 @@ int CDate::operator-(const CDate& date) const
 // Метод изменения даты на заданное количество дней.
 CDate CDate::operator+(const int days) const
 {
-	int daysCOpy = days;
+	int daysCopy = days;
 	int day1 = m_day, month1 = m_month, year1 = m_year;
 
-	while (daysCOpy) // Пока даты не равны, вычисляем следующую дату.
+	while (daysCopy) // Пока даты не равны, вычисляем следующую дату.
 	{
 		switch (month1)
 		{
@@ -99,7 +99,7 @@ CDate CDate::operator+(const int days) const
 			}
 			break;
 		}
-		daysCOpy--;
+		daysCopy--;
 		//cout << "Следующая дата: " << day1 << '.' << month1 << '.' << year1 << endl;
 	}
 	CDate res{ day1,month1,year1 };
@@ -177,9 +177,32 @@ CDate CDate::operator++() const
 
 // Метод перегрузки унарного оператора "--" для "this". 
 // Метод дает предыдущую дату.
-CDate CDate::operator--() const
+CDate CDate::operator--() const // НЕ РАБОТАЕТ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 {
-	return this->operator+(-1); // не работает. Расписать весь код.
+	// убрать скорее всего даже месяца, не то что год, ни найдутся точно нормальные
+	// нету смысла делать проверки дальше дней. !!!
+	int days{ 1 };
+	int day = m_day, month = m_month, year = m_year;
+	CDate res{ day,month,year };
+	/*while (days > 0)
+	{*/
+	while (DateValidationCheck(res) == false)
+	{
+		res.m_day--;
+		if (DateValidationCheck(res))
+			return res;
+		if (res.m_day < 1)
+		{
+			res.m_day = 31;
+			res.m_month--;
+			if (DateValidationCheck(res))
+				return res;
+		}
+	}
+	//days--;
+//}
+
+//return res;
 }
 
 // Метод определяет на основании даты день недели. 
@@ -203,7 +226,7 @@ const char* CDate::DayOfWeek() const
 	int m = month + 12 * a - 2;
 	int dow = (7000 + (day + y + y / 4 - y / 100 + y / 400 + (31 * m) / 12)) % 7; // ???
 
-	const char* str = new char; // когда удалять этот указатель на строку ????????????
+	const char* str = nullptr;
 
 	if (dow == Monday)
 		str = { "Monday" };
@@ -218,7 +241,7 @@ const char* CDate::DayOfWeek() const
 	else if (dow == Saturday)
 		str = { "Saturday" };
 	else if (dow == Sunday || dow == 0)
-		str = { "Sunday" }; 
+		str = { "Sunday" };
 
 	return str;
 }

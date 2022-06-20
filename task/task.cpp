@@ -24,7 +24,7 @@ int year);
 		ПРОТЕСТИРОВАТЬ:
 *
 		ВОПРОСЫ:
-* кгда удалять константный указатель из метода класса DayOfWeek() ? 
+*
 		ВИДЕО: 02:35:20(начало дз)
 ################################################
 */
@@ -37,9 +37,8 @@ using std::endl;
 
 int main()
 {
-	CDate date1{}, date2{}, resultCDate{};
+	CDate date1{}, date2{};
 
-	char action; // Действие с датами.
 	char answer{ 0 }; // Хотите повторить ?.
 	int days{ 0 };
 	bool resultBool{};
@@ -109,10 +108,10 @@ int main()
 			date2.operator++().PrintDate();
 			cout << endl << endl;
 
-			/*case '--': // не работает
-				cout << "date1-- = ";
-				date1.operator--().PrintDate();
-				cout << endl << endl;*/
+		case '--': // не работает
+			cout << "date1-- = ";
+			date1.operator--().PrintDate();
+			cout << endl << endl;
 
 		}
 		cout << endl << endl;
