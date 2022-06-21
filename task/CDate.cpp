@@ -31,10 +31,10 @@ int CDate::operator-(const CDate& date) const
 // Метод изменения даты на заданное количество дней.
 CDate CDate::operator+(const int days) const
 {
-	int daysCopy = days;
+	int daysCOpy = days;
 	int day1 = m_day, month1 = m_month, year1 = m_year;
 
-	while (daysCopy) // Пока даты не равны, вычисляем следующую дату.
+	while (daysCOpy) // Пока даты не равны, вычисляем следующую дату.
 	{
 		switch (month1)
 		{
@@ -99,8 +99,7 @@ CDate CDate::operator+(const int days) const
 			}
 			break;
 		}
-		daysCopy--;
-		//cout << "Следующая дата: " << day1 << '.' << month1 << '.' << year1 << endl;
+		daysCOpy--;
 	}
 	CDate res{ day1,month1,year1 };
 
@@ -177,32 +176,35 @@ CDate CDate::operator++() const
 
 // Метод перегрузки унарного оператора "--" для "this". 
 // Метод дает предыдущую дату.
-CDate CDate::operator--() const // НЕ РАБОТАЕТ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+CDate CDate::operator--() const
 {
-	// убрать скорее всего даже месяца, не то что год, ни найдутся точно нормальные
-	// нету смысла делать проверки дальше дней. !!!
 	int days{ 1 };
 	int day = m_day, month = m_month, year = m_year;
 	CDate res{ day,month,year };
-	/*while (days > 0)
-	{*/
-	while (DateValidationCheck(res) == false)
+
+	do
 	{
 		res.m_day--;
-		if (DateValidationCheck(res))
-			return res;
 		if (res.m_day < 1)
 		{
 			res.m_day = 31;
 			res.m_month--;
-			if (DateValidationCheck(res))
-				return res;
+			if (res.m_month < 1)
+			{
+				res.m_month = 12;
+				res.m_year--;
+				if (m_year < 1)
+				{
+					res.m_day = 1;
+					res.m_month = 1;
+					res.m_year = 1;
+					return res;
+				}
+			}
 		}
-	}
-	//days--;
-//}
+	} while (DateValidationCheck(res) == false);
 
-//return res;
+	return res;
 }
 
 // Метод определяет на основании даты день недели. 
@@ -224,7 +226,7 @@ const char* CDate::DayOfWeek() const
 	int a = (14 - month) / 12;
 	int y = year - a;
 	int m = month + 12 * a - 2;
-	int dow = (7000 + (day + y + y / 4 - y / 100 + y / 400 + (31 * m) / 12)) % 7; // ???
+	int dow = (7000 + (day + y + y / 4 - y / 100 + y / 400 + (31 * m) / 12)) % 7;
 
 	const char* str = nullptr;
 
@@ -254,9 +256,8 @@ void CDate::PrintDate()
 }
 
 // Функция, проверяющая является ли год високосным.
-bool IsItALeapYear(CDate date)
+bool IsItALeapYear(int year)
 {
-	int year = date.getYear();
 	if (year % 400 == 0 || (year % 100 != 0 && year % 4 == 0))
 		return true;
 	else
@@ -400,7 +401,6 @@ int DiffInDaysBetwDates(CDate date1, CDate date2)
 				}
 				break;
 			}
-			//cout << "Следующая дата: " << day1 << '.' << month1 << '.' << year1 << endl;
 			differenceIs++;
 		}
 	}

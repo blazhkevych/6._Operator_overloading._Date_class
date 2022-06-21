@@ -22,10 +22,6 @@ public:
 	// Конструктор по умолчанию (задает начальное значение).
 	CDate() :CDate(1, 1, 1) {};
 
-	// Конструктор с одним параметром стандартного типа является конструктором преобразования из этого типа в объект класса.
-	// Конструктор только с годом.
-	CDate(int year) :CDate(0, 0, year) {}; // скорее всего нужно убрать вообще !!!!!!!!!!!!!!!!!
-
 	// Конструктор с всеми параметрами.
 	CDate(int day, int month, int year)
 		:m_day(day), m_month(month), m_year(year) {};
@@ -72,14 +68,17 @@ public:
 	void PrintDate();
 };
 
+// Функция для ввода даты.
+void Input(CDate& date);
+
 // Функция, проверяющая является ли год високосным.
-bool IsItALeapYear(CDate date); // можно внести в приват класса !!!!!!!!!!!!!!!!!
+bool IsItALeapYear(int year);
 
 // Функция, проверяющая корректность введенных значений даты.
-bool DateValidationCheck(CDate date); // можно внести в приват класса !!!!!!!!!!!!!!!!!
+bool DateValidationCheck(CDate date);
 
 // Функция для ввода даты.
 void Input(CDate& date);
 
 // Функция, вычисляет разность в днях между этими датами.
-int DiffInDaysBetwDates(CDate date1, CDate date2); // можно внести в приват класса
+int DiffInDaysBetwDates(CDate date1, CDate date2);
